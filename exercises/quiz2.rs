@@ -18,7 +18,6 @@
 // - The output element is going to be a Vector of strings.
 // No hints this time!
 
-// I AM NOT DONE
 
 pub enum Command {
     Uppercase,
@@ -30,24 +29,33 @@ mod my_module {
     use super::Command;
 
     // TODO: Complete the function signature!
-    pub fn transformer(input: ???) -> ??? {
+    pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
         // TODO: Complete the output declaration!
-        let mut output: ??? = vec![];
+        let mut output: Vec<String> = vec![];
         for (string, command) in input.iter() {
             // TODO: Complete the function body. You can do it!
+            output.push(
+                // 因为是迭代器，所以取得都是指针
+                // string是&str
+                match command {
+                    Command::Uppercase => string.to_uppercase(),
+                    Command::Trim => string.trim().to_string(),
+                    Command::Append(n) => string.to_owned() + "bar".repeat(*n).as_str(),
+                }
+            );
         }
         output
     }
 }
-
 #[cfg(test)]
 mod tests {
     // TODO: What do we have to import to have `transformer` in scope?
-    use ???;
+    use super::my_module::transformer;
     use super::Command;
 
     #[test]
     fn it_works() {
+        // 常见的字符串String类型实现了From(&str)，那么&str就可以into()为String
         let output = transformer(vec![
             ("hello".into(), Command::Uppercase),
             (" all roads lead to rome! ".into(), Command::Trim),
@@ -59,4 +67,5 @@ mod tests {
         assert_eq!(output[2], "foobar");
         assert_eq!(output[3], "barbarbarbarbarbar");
     }
+
 }
